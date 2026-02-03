@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --background: 248 250 252;
-    --foreground: 15 23 42;
-    --primary: 29 78 216; /* Deep blue */
-    --accent: 220 38 38; /* Deep red */
+    --background: 255 255 255;
+    --foreground: 17 24 39;
+    --primary: 30 58 138; /* Navy blue */
+    --accent: 185 28 28; /* Classic red */
   }
   
   html {
@@ -16,7 +16,7 @@
   }
   
   body {
-    @apply bg-slate-50 text-slate-900;
+    @apply bg-white text-gray-900;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
@@ -26,21 +26,28 @@
     @apply max-w-7xl mx-auto;
   }
   
-  /* Political color accents */
+  /* Government header */
   .gov-header {
-    @apply bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900;
+    @apply bg-blue-900 border-b-4 border-red-700;
   }
   
+  /* Card styles */
   .political-card {
-    @apply bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow;
+    @apply bg-white border-2 border-gray-200 shadow-sm hover:shadow-lg transition-shadow;
   }
   
+  /* Button styles */
   .vote-button {
-    @apply bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-md transition-colors;
+    @apply bg-blue-900 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded transition-colors;
   }
   
+  .vote-button-alt {
+    @apply bg-red-700 hover:bg-red-800 text-white font-semibold px-6 py-3 rounded transition-colors;
+  }
+  
+  /* Political accents */
   .dem-accent {
-    @apply text-blue-700 border-blue-700;
+    @apply text-blue-900 border-blue-900;
   }
   
   .rep-accent {
@@ -54,18 +61,18 @@
   }
 }
 
-/* Custom scrollbar - more governmental */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  @apply bg-gray-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-blue-700 rounded;
+  @apply bg-blue-900 rounded;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -77,9 +84,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Focus visible styles - government accessible */
+/* Focus visible styles - accessible */
 *:focus-visible {
-  @apply outline-none ring-2 ring-blue-600 ring-offset-2;
+  @apply outline-none ring-2 ring-blue-900 ring-offset-2;
 }
 
 /* Animations */
@@ -128,30 +135,30 @@ html {
 
 /* Political data visualization colors */
 .chart-democrat {
-  @apply bg-blue-600;
+  @apply bg-blue-900;
 }
 
 .chart-republican {
-  @apply bg-red-600;
+  @apply bg-red-700;
 }
 
 .chart-independent {
-  @apply bg-purple-600;
+  @apply bg-gray-600;
 }
 
 /* Bill status badges */
 .status-passed {
-  @apply bg-green-100 text-green-800 border border-green-300;
+  @apply bg-blue-100 text-blue-900 border-2 border-blue-900;
 }
 
 .status-failed {
-  @apply bg-red-100 text-red-800 border border-red-300;
+  @apply bg-red-100 text-red-900 border-2 border-red-700;
 }
 
 .status-pending {
-  @apply bg-yellow-100 text-yellow-800 border border-yellow-300;
+  @apply bg-gray-100 text-gray-900 border-2 border-gray-400;
 }
 
 .status-in-committee {
-  @apply bg-blue-100 text-blue-800 border border-blue-300;
+  @apply bg-white text-blue-900 border-2 border-blue-900;
 }
