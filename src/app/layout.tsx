@@ -45,18 +45,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased">
-        {/* Subtle government-style top border */}
-        <div className="h-1 bg-gradient-to-r from-blue-800 via-red-700 to-blue-800" />
+      <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
+        <div className="h-1 bg-blue-900" />
+        <div className="h-0.5 bg-red-700" />
         
         <Header />
         
-        <main className="flex-1 relative">
-          {/* Optional: Add a subtle background pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none" />
-          <div className="relative z-10">
-            {children}
-          </div>
+        <main className="flex-1">
+          {children}
         </main>
         
         <Footer />
