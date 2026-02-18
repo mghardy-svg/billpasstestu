@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=DM+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,195 +5,160 @@
 @layer base {
   :root {
     --background: 255 255 255;
-    --foreground: 10 10 10;
-
-    /* Core palette — bold, editorial, political */
-    --navy:        #0B1F4B;   /* deep government navy */
-    --crimson:     #B91C1C;   /* strong red */
-    --gold:        #D97706;   /* amber accent */
-    --slate:       #1E293B;   /* dark text */
-    --smoke:       #F4F5F7;   /* light background */
-    --paper:       #FAFAF8;   /* warm off-white */
-    --ink:         #111827;
-
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body:    'Source Serif 4', Georgia, serif;
-    --font-mono:    'DM Mono', monospace;
+    --foreground: 17 24 39;
+    --primary: 30 58 138; /* Navy blue */
+    --accent: 185 28 28; /* Classic red */
   }
-
+  
   html {
     color-scheme: light;
-    scroll-behavior: smooth;
     @apply antialiased;
   }
-
+  
   body {
-    background-color: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-  }
-
-  code, pre, .mono {
-    font-family: var(--font-mono);
+    @apply bg-white text-gray-900;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
-/* ─── Layout ─────────────────────────────────────── */
 @layer components {
   .container {
     @apply max-w-7xl mx-auto;
   }
-
-  /* Bold editorial header stripe */
+  
+  /* Government header */
   .gov-header {
-    background-color: var(--navy);
-    border-bottom: 4px solid var(--crimson);
+    @apply bg-blue-900 border-b-4 border-red-700;
   }
-
-  /* Newspaper-style section labels */
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--crimson);
-    border-left: 3px solid var(--crimson);
-    padding-left: 0.6rem;
-  }
-
-  /* Card with editorial left-border accent */
+  
+  /* Card styles */
   .political-card {
-    @apply bg-white border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300;
-    border-top: 3px solid var(--navy);
+    @apply bg-white border-2 border-gray-200 shadow-sm hover:shadow-lg transition-shadow;
   }
-
-  .political-card-red {
-    @apply bg-white border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300;
-    border-top: 3px solid var(--crimson);
-  }
-
-  /* Buttons */
+  
+  /* Button styles */
   .vote-button {
-    background-color: var(--navy);
-    @apply text-white font-semibold px-6 py-3 rounded transition-all duration-200;
-    font-family: var(--font-mono);
-    letter-spacing: 0.04em;
-    font-size: 0.875rem;
+    @apply bg-blue-900 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded transition-colors;
   }
-  .vote-button:hover {
-    background-color: #0d2860;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(11,31,75,0.3);
-  }
-
+  
   .vote-button-alt {
-    background-color: var(--crimson);
-    @apply text-white font-semibold px-6 py-3 rounded transition-all duration-200;
-    font-family: var(--font-mono);
-    letter-spacing: 0.04em;
-    font-size: 0.875rem;
+    @apply bg-red-700 hover:bg-red-800 text-white font-semibold px-6 py-3 rounded transition-colors;
   }
-  .vote-button-alt:hover {
-    background-color: #991b1b;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(185,28,28,0.3);
+  
+  /* Political accents */
+  .dem-accent {
+    @apply text-blue-900 border-blue-900;
   }
-
-  /* Stat callout */
-  .stat-box {
-    @apply bg-white border-2 border-gray-100 rounded p-5 text-center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-
-  /* Progress bar */
-  .prob-bar-track {
-    @apply h-3 bg-gray-100 rounded overflow-hidden;
-  }
-  .prob-bar-fill-blue {
-    background-color: var(--navy);
-    @apply h-full rounded transition-all;
-  }
-  .prob-bar-fill-red {
-    background-color: var(--crimson);
-    @apply h-full rounded transition-all;
-  }
-
-  /* Bill status badges */
-  .status-passed    { @apply bg-blue-50 text-blue-900 border border-blue-300 text-xs font-mono px-2 py-0.5 rounded; }
-  .status-failed    { @apply bg-red-50 text-red-800 border border-red-300 text-xs font-mono px-2 py-0.5 rounded; }
-  .status-pending   { @apply bg-amber-50 text-amber-800 border border-amber-300 text-xs font-mono px-2 py-0.5 rounded; }
-  .status-in-committee { @apply bg-gray-50 text-gray-700 border border-gray-300 text-xs font-mono px-2 py-0.5 rounded; }
-
-  /* Chart party colors */
-  .chart-democrat   { background-color: var(--navy); }
-  .chart-republican { background-color: var(--crimson); }
-  .chart-independent{ @apply bg-gray-500; }
-
-  /* Horizontal rule — newspaper-style */
-  .rule-double {
-    border: none;
-    border-top: 3px double #d1d5db;
-    margin: 2rem 0;
+  
+  .rep-accent {
+    @apply text-red-700 border-red-700;
   }
 }
 
-/* ─── Custom Scrollbar ────────────────────────────── */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #0d2860; }
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
 
-/* ─── Focus / A11y ────────────────────────────────── */
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-900 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-blue-800;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus visible styles - accessible */
 *:focus-visible {
-  @apply outline-none;
-  box-shadow: 0 0 0 3px rgba(11,31,75,0.4);
+  @apply outline-none ring-2 ring-blue-900 ring-offset-2;
 }
 
-/* ─── Animations ──────────────────────────────────── */
+/* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
+
 @keyframes slideUp {
-  from { transform: translateY(16px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 @keyframes slideInLeft {
-  from { transform: translateX(-24px); opacity: 0; }
-  to   { transform: translateX(0);     opacity: 1; }
-}
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.6; }
-}
-
-.animate-fade-in  { animation: fadeIn 0.6s ease-in-out both; }
-.animate-slide-up { animation: slideUp 0.45s cubic-bezier(.16,1,.3,1) both; }
-.animate-slide-left { animation: slideInLeft 0.45s cubic-bezier(.16,1,.3,1) both; }
-.animate-pulse-slow { animation: pulse-slow 2.4s ease-in-out infinite; }
-
-/* Staggered children */
-.stagger > *:nth-child(1) { animation-delay: 0ms; }
-.stagger > *:nth-child(2) { animation-delay: 80ms; }
-.stagger > *:nth-child(3) { animation-delay: 160ms; }
-.stagger > *:nth-child(4) { animation-delay: 240ms; }
-
-/* ─── Hero texture overlay ────────────────────────── */
-.hero-texture {
-  background-image:
-    linear-gradient(135deg, rgba(11,31,75,0.96) 0%, rgba(11,31,75,0.88) 60%, rgba(185,28,28,0.72) 100%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-/* ─── Newspaper column dividers ───────────────────── */
-.col-rule {
-  border-right: 1px solid #e2e8f0;
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.4s ease-out;
+}
+
+/* Political data visualization colors */
+.chart-democrat {
+  @apply bg-blue-900;
+}
+
+.chart-republican {
+  @apply bg-red-700;
+}
+
+.chart-independent {
+  @apply bg-gray-600;
+}
+
+/* Bill status badges */
+.status-passed {
+  @apply bg-blue-100 text-blue-900 border-2 border-blue-900;
+}
+
+.status-failed {
+  @apply bg-red-100 text-red-900 border-2 border-red-700;
+}
+
+.status-pending {
+  @apply bg-gray-100 text-gray-900 border-2 border-gray-400;
+}
+
+.status-in-committee {
+  @apply bg-white text-blue-900 border-2 border-blue-900;
 }
