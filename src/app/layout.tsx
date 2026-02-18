@@ -1,12 +1,20 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import { Header, Footer } from '@/components/layout';
 import './globals.css';
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-body',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -44,17 +52,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
+    <html lang="en" className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
+      <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased font-body">
         <div className="h-1 bg-blue-900" />
         <div className="h-0.5 bg-red-700" />
-        
+
         <Header />
-        
+
         <main className="flex-1">
           {children}
         </main>
-        
+
         <Footer />
       </body>
     </html>
