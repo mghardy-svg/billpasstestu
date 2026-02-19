@@ -19,45 +19,79 @@ class PropositionService {
   private cacheTTL = 5 * 60 * 1000; // 5 minutes
 
   /**
-   * Get all propositions with optional filtering
+   * Get all propositions with optional filtering.
+   * If no year is specified, loads ALL available years.
    */
   async getAll(params?: PropositionQueryParams): Promise<ApiResponse<Proposition[]>> {
     try {
-      const year = params?.year || new Date().getFullYear();
-      const cacheKey = `propositions-${year}`;
-
-      // Check cache
-      const cached = this.getFromCache<Proposition[]>(cacheKey);
-      if (cached) {
-        return { data: this.filterPropositions(cached, params), success: true };
+      // If a specific year is requested, fetch just that year
+      if (params?.year) {
+        const cacheKey = `propositions-${params.year}`;
+        const cached = this.getFromCache<Proposition[]>(cacheKey);
+        const propositions = cached ?? await caSosClient.getPropositionsByYear(params.year);
+        if (!cached) this.setCache(cacheKey, propositions);
+        const filtered = this.filterPropositions(propositions, params);
+        return { data: filtered, success: true, meta: { total: filtered.length, cached: !!cached } };
       }
 
-      // Fetch from CA SOS
-      const propositions = await caSosClient.getPropositionsByYear(year);
+      // No year filter — load ALL years
+      const cacheKey = 'propositions-all';
+      const cached = this.getFromCache<Proposition[]>(cacheKey);
 
-      // Cache the results
-      this.setCache(cacheKey, propositions);
+      if (cached) {
+        return { data: this.filterPropositions(cached, params), success: true, meta: { total: cached.length, cached: true } };
+      }
 
-      // Apply filters
-      const filtered = this.filterPropositions(propositions, params);
+      const availableYears = await caSosClient.getAvailableYears();
+      const allPropositions: Proposition[] = [];
 
+      // Fetch all years in parallel (batched to avoid overwhelming)
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < availableYears.length; i += BATCH_SIZE) {
+        const batch = availableYears.slice(i, i + BATCH_SIZE);
+        const results = await Promise.all(
+          batch.map(async (year) => {
+            const yearCacheKey = `propositions-${year}`;
+            const yearCached = this.getFromCache<Proposition[]>(yearCacheKey);
+            if (yearCached) return yearCached;
+            const props = await caSosClient.getPropositionsByYear(year);
+            this.setCache(yearCacheKey, props);
+            return props;
+          })
+        );
+        for (const props of results) {
+          allPropositions.push(...props);
+        }
+      }
+
+      // Deduplicate by id
+      const seen = new Set<string>();
+      const deduplicated = allPropositions.filter(p => {
+        if (seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      });
+
+      // Sort by year desc, then proposition number asc
+      deduplicated.sort((a, b) => {
+        if (b.year !== a.year) return b.year - a.year;
+        return parseInt(a.number) - parseInt(b.number);
+      });
+
+      this.setCache(cacheKey, deduplicated);
+
+      const filtered = this.filterPropositions(deduplicated, params);
       return {
         data: filtered,
         success: true,
-        meta: {
-          total: filtered.length,
-          cached: false,
-        },
+        meta: { total: filtered.length, cached: false },
       };
     } catch (error) {
       console.error('Error fetching propositions:', error);
       return {
         data: [],
         success: false,
-        error: {
-          code: 'FETCH_ERROR',
-          message: 'Failed to fetch propositions',
-        },
+        error: { code: 'FETCH_ERROR', message: 'Failed to fetch propositions' },
       };
     }
   }
@@ -67,7 +101,6 @@ class PropositionService {
    */
   async getById(id: string): Promise<ApiResponse<PropositionWithDetails>> {
     try {
-      // Parse ID format: "YEAR-NUMBER"
       const [yearStr, number] = id.split('-');
       const year = parseInt(yearStr);
 
@@ -79,7 +112,6 @@ class PropositionService {
         };
       }
 
-      // Fetch base proposition data
       const proposition = await caSosClient.getProposition(year, number);
       if (!proposition) {
         return {
@@ -89,7 +121,6 @@ class PropositionService {
         };
       }
 
-      // Fetch additional data in parallel from APIs
       const [finance, ballotAnalysis] = await Promise.all([
         this.getFinanceData(number, year),
         this.getBallotAnalysis(proposition),
@@ -134,7 +165,7 @@ class PropositionService {
   }
 
   /**
-   * Get historical propositions
+   * Get historical propositions across a year range
    */
   async getHistorical(yearFrom: number, yearTo: number): Promise<ApiResponse<Proposition[]>> {
     try {
@@ -165,7 +196,6 @@ class PropositionService {
     try {
       const [yearStr, number] = propositionId.split('-');
       const year = parseInt(yearStr);
-
       const finance = await this.getFinanceData(number, year);
 
       if (!finance) {
@@ -187,21 +217,15 @@ class PropositionService {
   }
 
   /**
-   * Search propositions
+   * Search propositions across all years
    */
   async search(query: string): Promise<ApiResponse<Proposition[]>> {
     try {
-      // Search across multiple years
-      const currentYear = new Date().getFullYear();
-      const allPropositions: Proposition[] = [];
-
-      for (let year = currentYear; year >= currentYear - 4; year--) {
-        const yearProps = await caSosClient.getPropositionsByYear(year);
-        allPropositions.push(...yearProps);
-      }
+      const allResponse = await this.getAll();
+      if (!allResponse.success) return { data: [], success: false, error: allResponse.error };
 
       const queryLower = query.toLowerCase();
-      const filtered = allPropositions.filter(
+      const filtered = allResponse.data.filter(
         (p) =>
           p.title.toLowerCase().includes(queryLower) ||
           p.summary.toLowerCase().includes(queryLower) ||
