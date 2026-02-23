@@ -176,8 +176,6 @@ const CA_ELECTION_DATES: Record = {
   1910: ['1910-11-08'],
 };
 
-export default CA_ELECTION_DATES;
-
 // =============================================================================
 // PROPOSITION TITLES
 // Source: CA SOS Historical Information, Ballotpedia, Wikipedia
