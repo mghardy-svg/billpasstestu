@@ -2230,4 +2230,3 @@ class CASosClient {
 }
 
 export const caSosClient = new CASosClient();
-export default caSosClient;
