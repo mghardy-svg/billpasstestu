@@ -88,6 +88,13 @@ export default function HomePage() {
                 Beta Release — 2026 Election Cycle
               </Badge>
             </div>
+            <div className = "flex justify-center mb-4">
+              <img
+                src = "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg"
+                alt = "California State Flag"
+                className = "h-10 w-auto shadow-sm rounded"
+              />
+            </div>
             <h1 className="font-display text-display-xl md:text-6xl font-bold mb-6 text-gray-900">
               California Proposition
               <span className="block text-blue-900 mt-2">
