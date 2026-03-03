@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -19,7 +19,7 @@
   
   body {
     @apply bg-white text-gray-900;
-    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.05rem;
     line-height: 1.75;
   }
@@ -48,13 +48,13 @@
   /* Button styles */
   .vote-button {
     @apply bg-blue-900 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded transition-colors;
-    font-family: 'Source Serif 4', serif;
+    font-family: Georgia, serif;
     letter-spacing: 0.01em;
   }
   
   .vote-button-alt {
     @apply bg-red-700 hover:bg-red-800 text-white font-semibold px-6 py-3 rounded transition-colors;
-    font-family: 'Source Serif 4', serif;
+    font-family: Georgia, serif;
     letter-spacing: 0.01em;
   }
   
@@ -104,12 +104,8 @@ html {
 
 /* Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
